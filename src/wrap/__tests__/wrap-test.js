@@ -155,9 +155,9 @@ describe('wrap test', () => {
 				retezec: [
 					{first: 11}, {
 						second: 22,
-						pole: [
-							{prvni: 1, druhy: 2},
-							{prvni: 11, druhy: 22}
+						field: [
+							{first: 1, second: 2},
+							{first: 11, second: 22}
 						]
 					}, {amount: 4500}
 				]
