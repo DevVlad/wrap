@@ -1,24 +1,22 @@
 //need to unmock all packages from dependencies of '../wrap.js' !!!
 jest.unmock('../wrap.js');
-jest.unmock('immutable');
 jest.unmock('harmony-reflect');
-jest.unmock('flat');
 
 import 'harmony-reflect';
 import { wrap } from '../wrap.js';
 
 describe('wrap test', () => {
 	const dictionary = {
-		nazev: 'name',
-		castka: 'amount' ,
-		object: 'object',
-		adresa: 'address',
-		mesto: 'city',
-		jmeno: 'firstname',
-		prijmeni: 'surname',
-		prvni: 'first',
-		druhy: 'second',
-		pole: 'field'
+		name: 'nazev',
+		amount: 'castka',
+		address: 'adresa',
+		city: 'mesto',
+		firstname: 'jmeno',
+		surname: 'prijmeni',
+		first: 'prvni',
+		second: 'druhy',
+		field: 'pole',
+		length: 'delka'
 	};
 	let e = { id: 123, nazev: 'aaa', castka: 100.00 };
 	let f = wrap({entity: e, getDictionary: (e) => dictionary});
@@ -122,7 +120,7 @@ describe('wrap test', () => {
 	});
 
 	it('deep nested - inserting structure e -> f', () => {
-		e.object.pole.mesto = {
+		e.object.mesto = {
 			adresa: 'Rrrr899',
 			nazev: {
 				jmeno: 'koko8',
@@ -132,22 +130,22 @@ describe('wrap test', () => {
 				]
 			}
 		};
-		expect(e.object.pole.mesto.adresa).toEqual('Rrrr899');
-		expect(e.object.pole.mesto.nazev.jmeno).toEqual('koko8');
-		expect(e.object.pole.mesto.nazev.prijmeni).toEqual('lolo9');
-		expect(e.object.pole.mesto.nazev.retezec[0].prvni).toEqual(1);
-		expect(e.object.pole.mesto.nazev.retezec[1].druhy).toEqual(2);
-		expect(e.object.pole.mesto.nazev.retezec[2].castka).toEqual(450);
-		expect(f.object.field.city.address).toEqual('Rrrr899');
-		expect(f.object.field.city.name.firstname).toEqual('koko8');
-		expect(f.object.field.city.name.surname).toEqual('lolo9');
-		expect(f.object.field.city.name.retezec[0].first).toEqual(1);
-		expect(f.object.field.city.name.retezec[1].second).toEqual(2);
-		expect(f.object.field.city.name.retezec[2].amount).toEqual(450);
+		expect(e.object.mesto.adresa).toEqual('Rrrr899');
+		expect(e.object.mesto.nazev.jmeno).toEqual('koko8');
+		expect(e.object.mesto.nazev.prijmeni).toEqual('lolo9');
+		expect(e.object.mesto.nazev.retezec[0].prvni).toEqual(1);
+		expect(e.object.mesto.nazev.retezec[1].druhy).toEqual(2);
+		expect(e.object.mesto.nazev.retezec[2].castka).toEqual(450);
+		expect(f.object.city.address).toEqual('Rrrr899');
+		expect(f.object.city.name.firstname).toEqual('koko8');
+		expect(f.object.city.name.surname).toEqual('lolo9');
+		expect(f.object.city.name.retezec[0].first).toEqual(1);
+		expect(f.object.city.name.retezec[1].second).toEqual(2);
+		expect(f.object.city.name.retezec[2].amount).toEqual(450);
 	});
 
 	it('deep nested - inserting structure f -> e', () => {
-		f.object.field.city = {
+		f.object.city = {
 			address: 'Rrrr899a',
 			name: {
 				firstname: 'koko8a',
@@ -163,26 +161,39 @@ describe('wrap test', () => {
 				]
 			}
 		};
-		expect(e.object.pole.mesto.adresa).toEqual('Rrrr899a');
-		expect(e.object.pole.mesto.nazev.jmeno).toEqual('koko8a');
-		expect(e.object.pole.mesto.nazev.prijmeni).toEqual('lolo9a');
-		expect(e.object.pole.mesto.nazev.retezec[0].prvni).toEqual(11);
-		expect(e.object.pole.mesto.nazev.retezec[1].druhy).toEqual(22);
-		expect(e.object.pole.mesto.nazev.retezec[1].field[0].first).toEqual(1);
-		expect(e.object.pole.mesto.nazev.retezec[1].field[0].second).toEqual(2);
-		expect(e.object.pole.mesto.nazev.retezec[1].field[1].first).toEqual(11);
-		expect(e.object.pole.mesto.nazev.retezec[1].field[1].second).toEqual(22);
-		expect(e.object.pole.mesto.nazev.retezec[2].castka).toEqual(4500);
-		expect(f.object.field.city.address).toEqual('Rrrr899a');
-		expect(f.object.field.city.name.firstname).toEqual('koko8a');
-		expect(f.object.field.city.name.surname).toEqual('lolo9a');
-		expect(f.object.field.city.name.retezec[0].first).toEqual(11);
-		expect(f.object.field.city.name.retezec[1].second).toEqual(22);
-		expect(f.object.field.city.name.retezec[1].field[0].first).toEqual(1);
-		expect(f.object.field.city.name.retezec[1].field[0].second).toEqual(2);
-		expect(f.object.field.city.name.retezec[1].field[1].first).toEqual(11);
-		expect(f.object.field.city.name.retezec[1].field[1].second).toEqual(22);
-		expect(f.object.field.city.name.retezec[2].amount).toEqual(4500);
+		expect(e.object.mesto.adresa).toEqual('Rrrr899a');
+		expect(e.object.mesto.nazev.jmeno).toEqual('koko8a');
+		expect(e.object.mesto.nazev.prijmeni).toEqual('lolo9a');
+		expect(e.object.mesto.nazev.retezec[0].prvni).toEqual(11);
+		expect(e.object.mesto.nazev.retezec[1].druhy).toEqual(22);
+		expect(e.object.mesto.nazev.retezec[1].field[0].first).toEqual(1);
+		expect(e.object.mesto.nazev.retezec[1].field[0].second).toEqual(2);
+		expect(e.object.mesto.nazev.retezec[1].field[1].first).toEqual(11);
+		expect(e.object.mesto.nazev.retezec[1].field[1].second).toEqual(22);
+		expect(e.object.mesto.nazev.retezec[2].castka).toEqual(4500);
+		expect(f.object.city.address).toEqual('Rrrr899a');
+		expect(f.object.city.name.firstname).toEqual('koko8a');
+		expect(f.object.city.name.surname).toEqual('lolo9a');
+		expect(f.object.city.name.retezec[0].first).toEqual(11);
+		expect(f.object.city.name.retezec[1].second).toEqual(22);
+		expect(f.object.city.name.retezec[1].field[0].first).toEqual(1);
+		expect(f.object.city.name.retezec[1].field[0].second).toEqual(2);
+		expect(f.object.city.name.retezec[1].field[1].first).toEqual(11);
+		expect(f.object.city.name.retezec[1].field[1].second).toEqual(22);
+		expect(f.object.city.name.retezec[2].amount).toEqual(4500);
+	});
+
+	it ('length of proxy test', () => {
+		f.field = [
+			{name: 'aaa'},
+			{name: 'bbb'}
+		];
+		expect(f.field[0].name).toEqual('aaa');
+		expect(f.field[1].name).toEqual('bbb');
+		expect(e.pole[0].nazev).toEqual('aaa');
+		expect(e.pole[1].nazev).toEqual('bbb');
+		expect(f.field.length).toEqual(2);
+		expect(e.pole.length).toEqual(2);
 	});
 
 });

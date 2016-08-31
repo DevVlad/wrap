@@ -26,42 +26,70 @@ const wrapFunction = () => {
 		prijmeni: 'Nevim',
 	};
 	const dictionary = {
-		nazev: 'name',
-		castka: 'amount',
-		manzelky: 'wives',
-		prijmeni: 'surname',
-		prvni: 'first',
-		druha: 'second',
-		deti: 'children',
-		osoba: 'person',
-		prarodice: 'grandparents',
-		deda: 'grandfather',
-		babicka: 'grandmother',
-		jmeno: 'firstname',
-		banka: 'bank',
-		CSOB: 'CSOB2',
-		KB: 'KB2',
-		adresa: 'address'
+		name: 'nazev',
+		amount: 'castka',
+		wives: 'manzelky',
+		surname: 'prijmeni',
+		first: 'prvni',
+		second: 'druha',
+		children: 'deti',
+		person: 'osoba',
+		grandparents: 'prarodice',
+		grandfather: 'deda',
+		grandmother: 'babicka',
+		firstname: 'jmeno',
+		bank: 'banka',
+		CSOB2: 'CSOB',
+		KB2: 'KB',
+		address: 'adresa',
+		field: 'pole'
 	};
-	let wrappedEntity = wrap({entity: ent, getDictionary: (ent) => dictionary});
+
+	let wrappedEntity = wrap(
+		{
+			entity: ent,
+			getDictionary: (ent) => {
+				if (Array.isArray(ent)) {
+					return {};
+				} else {
+					return dictionary;
+				}
+			}
+		}
+	);
+
 	ent.object = {
 		jmeno: 'Aaa',
 		prijmeni: 'Bbb',
 		adresa: 'Add007'
 	};
-	wrappedEntity.object = {
-		firstname: 'Eee',
-		surname: 'Fff'
-	};
 	wrappedEntity.wives.first.person = {
 		firstname: 'Eee',
 		surname: 'Fff',
-		kolace: [{prvni: 125}, {druhy: 456}]
+		kolace: [
+			{first: 125},
+			{second: 456}
+		]
 	};
-	ent.manzelky.prvni.osoba.jmeno='kkkkk';
-	console.log(ent.manzelky.prvni.osoba.jmeno, wrappedEntity.wives.first.person.firstname);
-	console.log(wrappedEntity.wives.first.person.kolace[0].first, ent.manzelky.prvni.osoba.kolace[0].prvni);
+	wrappedEntity.field = [
+		{first: 1}, {second: 2}, {amount: 450}
+	];
+	ent.object.mesto = {
+		adresa: 'Rrrr899',
+		nazev: {
+			jmeno: 'koko8',
+			prijmeni: 'lolo9',
+			retezec: [
+				{prvni: 1}, {druha: 2}, {castka: 450}
+			]
+		}
+	};
 	console.log(ent, wrappedEntity);
+	console.log(ent.object.mesto.nazev.retezec[0].prvni);
+	console.log(wrappedEntity.object.mesto.name.retezec[1].second);
+	console.log('ent',ent.pole[0].prvni,'wrapped', wrappedEntity.field[0].first);
+	console.log('kolace 125','wrap',wrappedEntity.wives.first.person.kolace[0].first,'ent', ent.manzelky.prvni.osoba.kolace[0].prvni);
+
 };
 
 class App extends Component {
