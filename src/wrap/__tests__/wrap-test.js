@@ -153,7 +153,13 @@ describe('wrap test', () => {
 				firstname: 'koko8a',
 				surname: 'lolo9a',
 				retezec: [
-					{first: 11}, {second: 22}, {amount: 4500}
+					{first: 11}, {
+						second: 22,
+						pole: [
+							{prvni: 1, druhy: 2},
+							{prvni: 11, druhy: 22}
+						]
+					}, {amount: 4500}
 				]
 			}
 		};
@@ -162,14 +168,21 @@ describe('wrap test', () => {
 		expect(e.object.pole.mesto.nazev.prijmeni).toEqual('lolo9a');
 		expect(e.object.pole.mesto.nazev.retezec[0].prvni).toEqual(11);
 		expect(e.object.pole.mesto.nazev.retezec[1].druhy).toEqual(22);
+		expect(e.object.pole.mesto.nazev.retezec[1].field[0].first).toEqual(1);
+		expect(e.object.pole.mesto.nazev.retezec[1].field[0].second).toEqual(2);
+		expect(e.object.pole.mesto.nazev.retezec[1].field[1].first).toEqual(11);
+		expect(e.object.pole.mesto.nazev.retezec[1].field[1].second).toEqual(22);
 		expect(e.object.pole.mesto.nazev.retezec[2].castka).toEqual(4500);
 		expect(f.object.field.city.address).toEqual('Rrrr899a');
 		expect(f.object.field.city.name.firstname).toEqual('koko8a');
 		expect(f.object.field.city.name.surname).toEqual('lolo9a');
 		expect(f.object.field.city.name.retezec[0].first).toEqual(11);
 		expect(f.object.field.city.name.retezec[1].second).toEqual(22);
+		expect(f.object.field.city.name.retezec[1].field[0].first).toEqual(1);
+		expect(f.object.field.city.name.retezec[1].field[0].second).toEqual(2);
+		expect(f.object.field.city.name.retezec[1].field[1].first).toEqual(11);
+		expect(f.object.field.city.name.retezec[1].field[1].second).toEqual(22);
 		expect(f.object.field.city.name.retezec[2].amount).toEqual(4500);
 	});
-
 
 });
