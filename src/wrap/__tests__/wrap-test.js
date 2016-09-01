@@ -3,7 +3,7 @@ jest.unmock('../wrap.js');
 jest.unmock('harmony-reflect');
 
 import 'harmony-reflect';
-import { wrap, unwrapSymbol } from '../wrap.js';
+import { wrap, unwrap } from '../wrap.js';
 
 const dictionary = {
 	name: 'nazev',
@@ -219,7 +219,7 @@ describe('unwrap test', () => {
 	let f = wrap({entity: e, getDictionary: (e) => dictionary});
 
 	it ('unwrap f - whole', () => {
-		const unwrappedF = f[unwrapSymbol];
+		const unwrappedF = unwrap(f);
 		
 		expect(unwrappedF.id).toEqual(123);
 		expect(unwrappedF.nazev).toEqual('aaa');
@@ -239,7 +239,7 @@ describe('unwrap test', () => {
 	});
 
 	it ('unwrap f - sub', () => {
-		const unwrappedF = f.mesto.nazev[unwrapSymbol];
+		const unwrappedF = unwrap(f.mesto.nazev);
 
 		expect(unwrappedF.jmeno).toEqual('koko8');
 		expect(unwrappedF.prijmeni).toEqual('lolo9');

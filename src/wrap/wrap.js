@@ -1,13 +1,12 @@
 // unable to test Symbols, for test case, switch to string
-export const unwrapSymbol = 'V89R25r2222'//Symbol('unwrap');
+const unwrapSymbol = 'unwrap-33c1b4d8-b994-4248-ad1b-ccac9182395f';
 
 const translate = (key, dict) => dict[key] || key;
 
-const handleSimpArr = (arr, handler) => {
-		const { func, option } = handler;
+const handleSimpArr = (arr, func) => {
 		return arr.map(subArr => {
 			if (typeof subArr === 'object') {
-				return func(subArr, option);
+				return func(subArr);
 			}
 			else {
 				return subArr;
@@ -22,7 +21,7 @@ const translateEntity = (entity, getDictionary) => {
 		Object.keys(entity).forEach(key => {
 			let val = entity[key];
 			if (Array.isArray(val)) {
-				val = handleSimpArr(val, {func: transEnt, option: getDictionary});
+				val = handleSimpArr(val, e => transEnt(e, getDictionary));
 				// val = val.map(subEnt => {
 				// 	if (typeof subEnt === 'object') {
 				// 		return transEnt(subEnt, getDictionary);
@@ -41,14 +40,14 @@ const translateEntity = (entity, getDictionary) => {
 	return transEnt(entity, getDictionary);
 };
 
-const unwrap = (entity) => {
+const unwrapInternal = (entity) => {
 
 	const unwrapEnt = (ent) => {
 		let newEnt = {};
 		Object.keys(ent).forEach(key => {
 			let val = ent[key];
 			if (Array.isArray(val)) {
-				val = handleSimpArr(val, {func: unwrapEnt})
+				val = handleSimpArr(val, unwrapEnt);
 				// val = val.map(subEnt => {
 				// 	if (typeof subEnt === 'object') {
 				// 		return unwrapEnt(subEnt);
@@ -71,35 +70,17 @@ export const wrap = ({entity, getDictionary}) => {
 
 	const wrapEnt = (entity, getDictionary) => {
 		if (Array.isArray(entity)) {
-			return entity.map(e => {
-				if (typeof e === 'object') {
-					return wrapEnt(translateEntity(e, getDictionary), getDictionary);
-				} else {
-					return e;
-				}
-			});
-		} else {
+			return entity.map(e => wrapEnt(e, getDictionary));
+		} else if (typeof entity === 'object') {
+
 			const dict = getDictionary(entity);
 
 			return new Proxy(entity, {
 				get(entity, prop) {
 					if (prop === unwrapSymbol) {
-						return unwrap(entity);
+						return unwrapInternal(entity);
 					} else {
-						let result = entity[translate(prop, dict)];
-						if (Array.isArray(result)) {
-							result = handleSimpArr(result, {func: wrapEnt, option: getDictionary});
-							// result = result.map(res => {
-							// 	if (typeof res === 'object') {
-							// 		return wrapEnt(res, getDictionary);
-							// 	} else {
-							// 		return res;
-							// 	}
-							// });
-						} else if (typeof result === 'object') {
-							result = wrapEnt(result, getDictionary);
-						}
-						return result;
+						return wrapEnt(entity[translate(prop, dict)], getDictionary);
 					}
 				},
 				set(entity, prop, val) {
@@ -125,7 +106,13 @@ export const wrap = ({entity, getDictionary}) => {
 					return true;
 				}
 			});
+		} else {
+			return entity;
 		}
 	};
 	return wrapEnt(entity, getDictionary);
+};
+
+export const unwrap = (entity) => {
+	return entity[unwrapSymbol];
 };
