@@ -1,21 +1,36 @@
+// unable to test Symbols, for test case, switch to string
 export const unwrapSymbol = 'V89R25r2222'//Symbol('unwrap');
 
 const translate = (key, dict) => dict[key] || key;
 
+const handleSimpArr = (arr, handler) => {
+		const { func, option } = handler;
+		return arr.map(subArr => {
+			if (typeof subArr === 'object') {
+				return func(subArr, option);
+			}
+			else {
+				return subArr;
+			}
+		});
+}
+
 const translateEntity = (entity, getDictionary) => {
+
 	const transEnt = (entity, getDictionary) => {
 		let newEnt = {};
 		Object.keys(entity).forEach(key => {
 			let val = entity[key];
 			if (Array.isArray(val)) {
-				val = val.map(subEnt => {
-					if (typeof subEnt === 'object') {
-						return transEnt(subEnt, getDictionary);
-					}
-					else {
-						return subEnt;
-					}
-				});
+				val = handleSimpArr(val, {func: transEnt, option: getDictionary});
+				// val = val.map(subEnt => {
+				// 	if (typeof subEnt === 'object') {
+				// 		return transEnt(subEnt, getDictionary);
+				// 	}
+				// 	else {
+				// 		return subEnt;
+				// 	}
+				// });
 			} else if (typeof val === 'object') {
 				val = transEnt(val, getDictionary);
 			}
@@ -27,19 +42,21 @@ const translateEntity = (entity, getDictionary) => {
 };
 
 const unwrap = (entity) => {
+
 	const unwrapEnt = (ent) => {
 		let newEnt = {};
 		Object.keys(ent).forEach(key => {
 			let val = ent[key];
 			if (Array.isArray(val)) {
-				val = val.map(subEnt => {
-					if (typeof subEnt === 'object') {
-						return unwrapEnt(subEnt);
-					}
-					else {
-						return subEnt;
-					}
-				});
+				val = handleSimpArr(val, {func: unwrapEnt})
+				// val = val.map(subEnt => {
+				// 	if (typeof subEnt === 'object') {
+				// 		return unwrapEnt(subEnt);
+				// 	}
+				// 	else {
+				// 		return subEnt;
+				// 	}
+				// });
 			} else if (typeof val === 'object') {
 				val = unwrapEnt(val);
 			}
@@ -71,13 +88,14 @@ export const wrap = ({entity, getDictionary}) => {
 					} else {
 						let result = entity[translate(prop, dict)];
 						if (Array.isArray(result)) {
-							result = result.map(res => {
-								if (typeof res === 'object') {
-									return wrapEnt(res, getDictionary);
-								} else {
-									return res;
-								}
-							});
+							result = handleSimpArr(result, {func: wrapEnt, option: getDictionary});
+							// result = result.map(res => {
+							// 	if (typeof res === 'object') {
+							// 		return wrapEnt(res, getDictionary);
+							// 	} else {
+							// 		return res;
+							// 	}
+							// });
 						} else if (typeof result === 'object') {
 							result = wrapEnt(result, getDictionary);
 						}
@@ -108,7 +126,6 @@ export const wrap = ({entity, getDictionary}) => {
 				}
 			});
 		}
-
 	};
 	return wrapEnt(entity, getDictionary);
 };
