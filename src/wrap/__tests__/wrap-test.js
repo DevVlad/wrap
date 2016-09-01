@@ -218,15 +218,39 @@ describe('unwrap test', () => {
 	};
 	let f = wrap({entity: e, getDictionary: (e) => dictionary});
 
-	it ('unwrap f', () => {
+	it ('unwrap f - whole', () => {
 		const unwrappedF = f[unwrapSymbol];
-		console.log(unwrappedF);
-		// expect(f.field[0].name).toEqual('aaa');
-		// expect(f.field[1].name).toEqual('bbb');
-		// expect(e.pole[0].nazev).toEqual('aaa');
-		// expect(e.pole[1].nazev).toEqual('bbb');
-		// expect(f.field.length).toEqual(2);
-		// expect(e.pole.length).toEqual(2);
+		
+		expect(unwrappedF.id).toEqual(123);
+		expect(unwrappedF.nazev).toEqual('aaa');
+		expect(unwrappedF.castka).toEqual(100.00);
+		expect(typeof unwrappedF.mesto).toEqual('object');
+		expect(unwrappedF.mesto.adresa).toEqual('Rrrr899');
+		expect(typeof unwrappedF.mesto.nazev).toEqual('object');
+		expect(unwrappedF.mesto.nazev.jmeno).toEqual('koko8');
+		expect(unwrappedF.mesto.nazev.prijmeni).toEqual('lolo9');
+		expect(Array.isArray(unwrappedF.mesto.nazev.retezec)).toEqual(true);
+		expect(typeof unwrappedF.mesto.nazev.retezec[0]).toEqual('object');
+		expect(typeof unwrappedF.mesto.nazev.retezec[1]).toEqual('object');
+		expect(typeof unwrappedF.mesto.nazev.retezec[2]).toEqual('object');
+		expect(unwrappedF.mesto.nazev.retezec[0].prvni).toEqual(1);
+		expect(unwrappedF.mesto.nazev.retezec[1].druhy).toEqual(2);
+		expect(unwrappedF.mesto.nazev.retezec[2].castka).toEqual(450);
+	});
+
+	it ('unwrap f - sub', () => {
+		const unwrappedF = f.mesto.nazev[unwrapSymbol];
+
+		expect(unwrappedF.jmeno).toEqual('koko8');
+		expect(unwrappedF.prijmeni).toEqual('lolo9');
+		expect(Array.isArray(unwrappedF.retezec)).toEqual(true);
+		expect(unwrappedF.retezec.length).toEqual(3);
+		expect(typeof unwrappedF.retezec[0]).toEqual('object');
+		expect(typeof unwrappedF.retezec[1]).toEqual('object');
+		expect(typeof unwrappedF.retezec[2]).toEqual('object');
+		expect(unwrappedF.retezec[0].prvni).toEqual(1);
+		expect(unwrappedF.retezec[1].druhy).toEqual(2);
+		expect(unwrappedF.retezec[2].castka).toEqual(450);
 	});
 
 
