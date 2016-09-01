@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import {wrap} from './wrap/wrap.js'
+import { wrap, unwrapSymbol } from './wrap/wrap.js'
 
 const wrapFunction = () => {
 	let ent = {
@@ -89,6 +89,8 @@ const wrapFunction = () => {
 	console.log(wrappedEntity.object.mesto.name.retezec[1].second);
 	console.log('ent',ent.pole[0].prvni,'wrapped', wrappedEntity.field[0].first);
 	console.log('kolace 125','wrap',wrappedEntity.wives.first.person.kolace[0].first,'ent', ent.manzelky.prvni.osoba.kolace[0].prvni);
+	const unwrappedEnt = wrappedEntity[unwrapSymbol];
+	console.log('UNWRAP', unwrappedEnt.manzelky.prvni.osoba.kolace[1].druha);
 
 };
 

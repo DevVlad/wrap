@@ -3,21 +3,23 @@ jest.unmock('../wrap.js');
 jest.unmock('harmony-reflect');
 
 import 'harmony-reflect';
-import { wrap } from '../wrap.js';
+import { wrap, unwrapSymbol } from '../wrap.js';
+
+const dictionary = {
+	name: 'nazev',
+	amount: 'castka',
+	address: 'adresa',
+	city: 'mesto',
+	firstname: 'jmeno',
+	surname: 'prijmeni',
+	first: 'prvni',
+	second: 'druhy',
+	field: 'pole',
+	length: 'delka'
+};
 
 describe('wrap test', () => {
-	const dictionary = {
-		name: 'nazev',
-		amount: 'castka',
-		address: 'adresa',
-		city: 'mesto',
-		firstname: 'jmeno',
-		surname: 'prijmeni',
-		first: 'prvni',
-		second: 'druhy',
-		field: 'pole',
-		length: 'delka'
-	};
+
 	let e = { id: 123, nazev: 'aaa', castka: 100.00 };
 	let f = wrap({entity: e, getDictionary: (e) => dictionary});
 
@@ -195,5 +197,37 @@ describe('wrap test', () => {
 		expect(f.field.length).toEqual(2);
 		expect(e.pole.length).toEqual(2);
 	});
+
+});
+
+describe('unwrap test', () => {
+	let e = {
+		id: 123,
+		nazev: 'aaa',
+		castka: 100.00,
+		mesto: {
+			adresa: 'Rrrr899',
+			nazev: {
+				jmeno: 'koko8',
+				prijmeni: 'lolo9',
+				retezec: [
+					{prvni: 1}, {druhy: 2}, {castka: 450}
+				]
+			}
+		}
+	};
+	let f = wrap({entity: e, getDictionary: (e) => dictionary});
+
+	it ('unwrap f', () => {
+		const unwrappedF = f[unwrapSymbol];
+		console.log(unwrappedF);
+		// expect(f.field[0].name).toEqual('aaa');
+		// expect(f.field[1].name).toEqual('bbb');
+		// expect(e.pole[0].nazev).toEqual('aaa');
+		// expect(e.pole[1].nazev).toEqual('bbb');
+		// expect(f.field.length).toEqual(2);
+		// expect(e.pole.length).toEqual(2);
+	});
+
 
 });

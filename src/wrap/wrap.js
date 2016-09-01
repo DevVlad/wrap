@@ -1,7 +1,8 @@
+export const unwrapSymbol = Symbol('unwrap');
+
 const translate = (key, dict) => dict[key] || key;
 
 const translateEntity = (entity, getDictionary) => {
-
 	const transEnt = (entity, getDictionary) => {
 		let newEnt = {};
 		Object.keys(entity).forEach(key => {
@@ -25,6 +26,30 @@ const translateEntity = (entity, getDictionary) => {
 	return transEnt(entity, getDictionary);
 };
 
+const unwrap = (entity) => {
+	const unwrapEnt = (ent) => {
+		let newEnt = {};
+		Object.keys(ent).forEach(key => {
+			let val = ent[key];
+			if (Array.isArray(val)) {
+				val = val.map(subEnt => {
+					if (typeof subEnt === 'object') {
+						return unwrapEnt(subEnt);
+					}
+					else {
+						return subEnt;
+					}
+				});
+			} else if (typeof val === 'object') {
+				val = unwrapEnt(val);
+			}
+			newEnt[key] = val;
+		});
+		return Array.isArray(ent) ? ent : newEnt;
+	};
+	return unwrapEnt(entity);
+};
+
 export const wrap = ({entity, getDictionary}) => {
 
 	const wrapEnt = (entity, getDictionary) => {
@@ -41,19 +66,23 @@ export const wrap = ({entity, getDictionary}) => {
 
 			return new Proxy(entity, {
 				get(entity, prop) {
-					let result = entity[translate(prop, dict)];
-					if (Array.isArray(result)) {
-						result = result.map(res => {
-							if (typeof res === 'object') {
-								return wrapEnt(res, getDictionary);
-							} else {
-								return res;
-							}
-						});
-					} else if (typeof result === 'object') {
-						result = wrapEnt(result, getDictionary);
+					if (prop === unwrapSymbol) {
+						return unwrap(entity);
+					} else {
+						let result = entity[translate(prop, dict)];
+						if (Array.isArray(result)) {
+							result = result.map(res => {
+								if (typeof res === 'object') {
+									return wrapEnt(res, getDictionary);
+								} else {
+									return res;
+								}
+							});
+						} else if (typeof result === 'object') {
+							result = wrapEnt(result, getDictionary);
+						}
+						return result;
 					}
-					return result;
 				},
 				set(entity, prop, val) {
 					if (Array.isArray(val)) {
@@ -69,7 +98,7 @@ export const wrap = ({entity, getDictionary}) => {
 						let subRes = {};
 						Object.keys(val).forEach(v => {
 							const key = val[v];
-							subRes[translate(v, dict)] = typeof key !== 'object' ? key : wrapEnt(translateEntity(key, getDictionary), getDictionary);
+							subRes[translate(v, dict)] = typeof key === 'object' ? wrapEnt(translateEntity(key, getDictionary), getDictionary) : key;
 						});
 						entity[translate(prop, dict)] = subRes;
 					} else {
