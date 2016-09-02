@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { wrap, unwrapSymbol } from './wrap/wrap.js'
+import { wrap, unwrap } from './wrap/wrap.js'
 
 const wrapFunction = () => {
 	let ent = {
@@ -46,15 +46,13 @@ const wrapFunction = () => {
 	};
 
 	let wrappedEntity = wrap(
-		{
-			entity: ent,
-			getDictionary: (ent) => {
+		ent,
+		(ent) => {
 				if (Array.isArray(ent)) {
 					return {};
 				} else {
 					return dictionary;
 				}
-			}
 		}
 	);
 
@@ -63,18 +61,7 @@ const wrapFunction = () => {
 		prijmeni: 'Bbb',
 		adresa: 'Add007'
 	};
-	wrappedEntity.wives.first.person = {
-		firstname: 'Eee',
-		surname: 'Fff',
-		kolace: [
-			{first: 125},
-			{second: 456}
-		]
-	};
-	wrappedEntity.field = [
-		{first: 1}, {second: 2}, {amount: 450}
-	];
-	ent.object.mesto = {
+	wrappedEntity.object.mesto = {
 		adresa: 'Rrrr899',
 		nazev: {
 			jmeno: 'koko8',
@@ -84,13 +71,11 @@ const wrapFunction = () => {
 			]
 		}
 	};
-	console.log(ent, wrappedEntity);
-	console.log(ent.object.mesto.nazev.retezec[0].prvni);
-	console.log(wrappedEntity.object.mesto.name.retezec[1].second);
-	console.log('ent',ent.pole[0].prvni,'wrapped', wrappedEntity.field[0].first);
-	console.log('kolace 125','wrap',wrappedEntity.wives.first.person.kolace[0].first,'ent', ent.manzelky.prvni.osoba.kolace[0].prvni);
-	const unwrappedEnt = wrappedEntity[unwrapSymbol];
-	console.log('UNWRAP', unwrappedEnt.manzelky.prvni.osoba.kolace[1].druha);
+	wrappedEntity.field=[{a: 12}, {b: 45}]
+	console.log(ent, wrappedEntity.object.mesto.name.retezec[1].second);
+
+	const unwrappedEnt = unwrap(wrappedEntity);
+	console.log('UNWRAP', unwrappedEnt);
 
 };
 
