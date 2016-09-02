@@ -71,6 +71,7 @@ const wrapFunction = () => {
 			]
 		}
 	};
+	wrappedEntity.field=[{a: 12}, {b: 45}]
 	console.log(ent, wrappedEntity.object.mesto.name.retezec[1].second);
 
 	const unwrappedEnt = unwrap(wrappedEntity);
