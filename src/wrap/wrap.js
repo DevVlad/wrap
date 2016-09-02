@@ -66,7 +66,7 @@ const unwrapInternal = (entity) => {
 	return unwrapEnt(entity);
 };
 
-export const wrap = ({entity, getDictionary}) => {
+export const wrap = (entity, getDictionary) => {
 
 	const wrapEnt = (entity, getDictionary) => {
 		if (Array.isArray(entity)) {

@@ -21,7 +21,7 @@ const dictionary = {
 describe('wrap test', () => {
 
 	let e = { id: 123, nazev: 'aaa', castka: 100.00 };
-	let f = wrap({entity: e, getDictionary: (e) => dictionary});
+	let f = wrap(e, (e) => dictionary);
 
   it('init', () => {
 		expect(e.id).toEqual(123);
@@ -216,11 +216,11 @@ describe('unwrap test', () => {
 			}
 		}
 	};
-	let f = wrap({entity: e, getDictionary: (e) => dictionary});
+	let f = wrap(e, (e) => dictionary);
 
 	it ('unwrap f - whole', () => {
 		const unwrappedF = unwrap(f);
-		
+
 		expect(unwrappedF.id).toEqual(123);
 		expect(unwrappedF.nazev).toEqual('aaa');
 		expect(unwrappedF.castka).toEqual(100.00);
