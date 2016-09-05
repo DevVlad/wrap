@@ -45,7 +45,7 @@ const unwrapInternal = (entity) => {
 	return unwrapEnt(entity);
 };
 
-export const wrap = (entity, getDictionary) => {
+const wrapInternal = (entity, getDictionary) => {
 
 	const wrapEnt = (entity, getDictionary) => {
 		if (Array.isArray(entity)) {
@@ -84,6 +84,11 @@ export const wrap = (entity, getDictionary) => {
 	return wrapEnt(entity, getDictionary);
 };
 
+//	exports
 export const unwrap = (entity) => {
 	return entity[unwrapSymbol];
+};
+
+export const wrap = (entity, getDictionary) => {
+	return wrapInternal(entity, getDictionary);
 };
