@@ -1,7 +1,3 @@
-//need to unmock all packages from dependencies of '../wrap.js' !!!
-jest.unmock('../wrap.js');
-jest.unmock('harmony-reflect');
-
 import 'harmony-reflect';
 import { wrap, unwrap } from '../wrap.js';
 
